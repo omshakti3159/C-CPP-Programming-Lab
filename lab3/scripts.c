@@ -4,8 +4,6 @@
 #include "scripts.h"
 
 int add_range(SCRIPT_T *all_scripts, char *name, int start, int end, int size){
-  size++;
-
   if (size != 0){
     SCRIPT_T *prev_script = all_scripts + size - 1;
     if (!strcmp(prev_script->name, name)){
@@ -13,6 +11,7 @@ int add_range(SCRIPT_T *all_scripts, char *name, int start, int end, int size){
       return size;
     }
   }
+  strcpy((all_scripts + size)->name, name);
   add_range_to_script(all_scripts + size, start, end);
 
   return size + 1;
@@ -21,12 +20,12 @@ int add_range(SCRIPT_T *all_scripts, char *name, int start, int end, int size){
 
 void add_range_to_script(SCRIPT_T *script, int start, int end){
   int length = script->length;
-  if (script->length + 1 > script->maxlength){
-    script->start = (int *)realloc(script->start, STEP_SIZE * sizeof(int));
-    script->end = (int *)realloc(script->end, STEP_SIZE * sizeof(int));
+  if (length + 1 > script->maxlength){
+    script->start = (int *)realloc(script->start, (script->maxlength + STEP_SIZE) * sizeof(int));
+    script->end = (int *)realloc(script->end, (script->maxlength + STEP_SIZE) * sizeof(int));
     script->maxlength += STEP_SIZE;
   }
-  if (script->length == 0){
+  if (length == 0){
     *(script->start) = start;
     *(script->end) = end;
     script->length++;

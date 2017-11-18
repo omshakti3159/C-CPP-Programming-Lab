@@ -2,11 +2,7 @@
 #include <string.h>
 #include "readfile.h"
 
-#define INPUT_LEN 100
-#define NAME_LEN 20
-#define ARR_SIZE 300
-
-
+#define FILE_PATH "Scripts.txt"
 
 int main() {
 
@@ -21,7 +17,7 @@ int main() {
 //        printf("%d\t%d\n%s\n", start, end, script_name);
 //    }
 
-    readfile();
+    readfile(FILE_PATH);
 
     return 0;
 }
