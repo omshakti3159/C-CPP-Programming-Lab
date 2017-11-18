@@ -9,3 +9,6 @@ lab3 : $(SRC)
 
 %.o : %.c
 	gcc $(CFLAGS) -c $< -o $@ $(LIBS)
+
+clean:
+	rm *.o lab3 -f
