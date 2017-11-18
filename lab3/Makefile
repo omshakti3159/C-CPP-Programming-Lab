@@ -1,6 +1,6 @@
 CFLAGS = -Wall
 LIBS = -lm
-SRC = main.c readfile.c
+SRC = main.c readfile.c scripts.c
 
 all: lab3
 
