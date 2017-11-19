@@ -1,6 +1,6 @@
 #include <stdio.h>
 #include <string.h>
-#include "readfile.h"
+#include "loadscripts.h"
 #include "scripts.h"
 #include "global.h"
 
