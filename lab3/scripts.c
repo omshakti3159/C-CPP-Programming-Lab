@@ -69,20 +69,21 @@ void print_all_scripts(SCRIPT_T *all_scripts, int size){
 
 }
 
-int find_script(SCRIPT_T *all_scripts, int size){
+int find_script(SCRIPT_T *all_scripts, int size, unsigned int codepoint){
   int i, j;
-  unsigned int a;
+  // unsigned int a;
   SCRIPT_T *script;
 
-  printf("Please enter a codepoint: ");
-  scanf("%X", &a);
+  // printf("Please enter a codepoint: ");
+  // scanf("%X", &a);
 
   for (i = 0; i < size; i++){
     script = all_scripts + i;
     //printf("Script: %s\n", script->name);
     for (j = 0; j < script->length; j++){
-      if ((a >= *(script->start + j)) && a <= *(script->end + j)){
-        printf("Script Recognized: %s\n", script->name);
+      if ((codepoint >= *(script->start + j))
+          && codepoint <= *(script->end + j)){
+        // printf("Script Recognized: %s\n", script->name);
         return i;
       }
     }
