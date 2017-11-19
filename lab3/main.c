@@ -1,8 +1,8 @@
 #include <stdio.h>
 #include <string.h>
 #include "readfile.h"
-
-#define FILE_PATH "Scripts.txt"
+#include "global.h"
+#include "scripts.h"
 
 int main() {
 
@@ -17,7 +17,13 @@ int main() {
 //        printf("%d\t%d\n%s\n", start, end, script_name);
 //    }
 
-    readfile(FILE_PATH);
+    int size;
+    SCRIPT_T all_scripts[ARR_SIZE];
+
+    size = readfile(FILE_PATH, &all_scripts);
+    print_all_scripts(all_scripts, size);
+    find_script(all_scripts, size);
+
 
     return 0;
 }

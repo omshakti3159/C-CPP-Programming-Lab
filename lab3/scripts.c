@@ -53,3 +53,39 @@ void initialize_all_scripts(SCRIPT_T *all_scripts, int max_size){
     *((all_scripts + i)->end) = 0;
   }
 }
+
+void print_all_scripts(SCRIPT_T *all_scripts, int size){
+  SCRIPT_T *script;
+  int i = 0, j = 0;
+  for (i = 0; i < size; i++){
+    script = all_scripts + i;
+    printf("Script: %s\n", script->name);
+    for (j = 0; j < script->length; j++){
+      printf("No. %3d\tStart: %X\tEnd: %X\n", j, *(script->start + j), *(script->end + j));
+    }
+  }
+
+  printf("Array size = %d\n", size);
+
+}
+
+int find_script(SCRIPT_T *all_scripts, int size){
+  int i, j;
+  unsigned int a;
+  SCRIPT_T *script;
+
+  printf("Please enter a codepoint: ");
+  scanf("%X", &a);
+
+  for (i = 0; i < size; i++){
+    script = all_scripts + i;
+    //printf("Script: %s\n", script->name);
+    for (j = 0; j < script->length; j++){
+      if ((a >= *(script->start + j)) && a <= *(script->end + j)){
+        printf("Script Recognized: %s\n", script->name);
+        return i;
+      }
+    }
+  }
+  return -1;
+}

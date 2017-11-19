@@ -14,5 +14,7 @@ typedef struct script {
 int add_range(SCRIPT_T *all_scripts, char *name, int start, int end, int size);
 void add_range_to_script(SCRIPT_T *script, int start, int end);
 void initialize_all_scripts(SCRIPT_T *all_scripts, int max_size);
+void print_all_scripts(SCRIPT_T *all_scripts, int size);
+int find_script(SCRIPT_T *all_scripts, int size);
 
 #endif
