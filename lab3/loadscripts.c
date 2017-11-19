@@ -16,7 +16,7 @@ int loadscripts(const char* fpath, SCRIPT_T *all_scripts){
     initialize_all_scripts(all_scripts, ARR_SIZE);
 
     if ((fp = fopen(fpath, "r")) != NULL){
-        printf("\"%s\" successfully opened!\n", fpath);
+        //printf("\"%s\" successfully opened!\n", fpath);
         while(fgets(line, INPUT_LEN, fp) != NULL){
             if (readline(line, &start, &end, script_name)){
               continue;
@@ -24,6 +24,9 @@ int loadscripts(const char* fpath, SCRIPT_T *all_scripts){
             //printf("%s\n", line);
             size = add_range(all_scripts, script_name, start, end, size);
         }
+    }
+    else{
+      return -1;
     }
 
     return size;
