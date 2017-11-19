@@ -11,9 +11,9 @@ int main() {
     int size;
     SCRIPT_T all_scripts[ARR_SIZE];
 
-    size = readfile(FILE_PATH, &all_scripts);
+    size = loadscripts(FILE_PATH, &all_scripts);
     //print_all_scripts(all_scripts, size);
-    
+
     char line[FILE_SIZE];
     unsigned char *p;
     int bytes_in_char;
@@ -27,7 +27,7 @@ int main() {
 
     while (fgets(line, FILE_SIZE, stdin) != NULL){
       p = (unsigned char *)line;
-      printf("%s\n", p);
+      //printf("%s\n", p);
       while (*p){
         codepoint = utf8_to_codepoint(p, &bytes_in_char);
         if (codepoint){

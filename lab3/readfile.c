@@ -4,7 +4,7 @@
 #include "scripts.h"
 #include "global.h"
 
-int readfile(const char* fpath, SCRIPT_T *all_scripts){
+int loadscripts(const char* fpath, SCRIPT_T *all_scripts){
 
     FILE *fp;
     char line[INPUT_LEN];
@@ -26,11 +26,7 @@ int readfile(const char* fpath, SCRIPT_T *all_scripts){
         }
     }
 
-
-
     return size;
-
-
 }
 
 int readline(char * input, int * start, int * end, char * script_name){
