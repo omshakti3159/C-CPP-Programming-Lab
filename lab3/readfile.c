@@ -13,6 +13,9 @@ int* initialize_count(int size){
   return count;
 }
 
+/*
+  Read each character from the input and count by scripts.
+*/
 void read_and_count(SCRIPT_T *all_scripts, int *count, int size){
   char line[FILE_SIZE];
   unsigned char *p;
@@ -21,6 +24,9 @@ void read_and_count(SCRIPT_T *all_scripts, int *count, int size){
 
   while (fgets(line, FILE_SIZE, stdin) != NULL){
     p = (unsigned char *)line;
+    /*
+      Reference: using_utf8_to_codepoint.c
+    */
     while (*p){
       codepoint = utf8_to_codepoint(p, &bytes_in_char);
       if (codepoint){
@@ -34,6 +40,9 @@ void read_and_count(SCRIPT_T *all_scripts, int *count, int size){
   }
 }
 
+/*
+  Print the script with maximum count.
+*/
 void print_max_count(SCRIPT_T *all_scripts, int *count, int size){
   int i = 0;
   int max_cnt = 0;

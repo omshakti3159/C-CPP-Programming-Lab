@@ -4,6 +4,9 @@
 #include "scripts.h"
 #include "global.h"
 
+/*
+  Load all the scripts from a file.
+*/
 int loadscripts(const char* fpath, SCRIPT_T *all_scripts){
 
     FILE *fp;
@@ -12,7 +15,6 @@ int loadscripts(const char* fpath, SCRIPT_T *all_scripts){
     int start, end;
     int size = 0;
 
-    //SCRIPT_T all_scripts[ARR_SIZE];
     initialize_all_scripts(all_scripts, ARR_SIZE);
 
     if ((fp = fopen(fpath, "r")) != NULL){
@@ -21,7 +23,6 @@ int loadscripts(const char* fpath, SCRIPT_T *all_scripts){
             if (readline(line, &start, &end, script_name)){
               continue;
             }
-            //printf("%s\n", line);
             size = add_range(all_scripts, script_name, start, end, size);
         }
     }
@@ -32,6 +33,9 @@ int loadscripts(const char* fpath, SCRIPT_T *all_scripts){
     return size;
 }
 
+/*
+  Read each line in the file "Scripts.txt".
+*/
 int readline(char * input, int * start, int * end, char * script_name){
     if (3 != sscanf(input, "%x..%x    ; %s ", start, end, script_name)){
         if (2 == sscanf(input, "%x          ; %s ", start, script_name)){

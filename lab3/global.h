@@ -1,3 +1,7 @@
+/*
+  This is the only header for gloabl variables.
+  You can change them as you want.
+*/
 #ifndef GLOBAL_H
 #define GLOBAL_H
 
