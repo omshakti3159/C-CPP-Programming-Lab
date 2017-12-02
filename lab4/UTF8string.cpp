@@ -52,6 +52,9 @@ void UTF8string::replace(UTF8string remove, UTF8string replacement) {
 							(unsigned char *) m_s.c_str() + offset,
 							(unsigned char *) remove.value().c_str())
 					)){
+		// Here, we need to keep track of the "offset" for utf8_search
+		// so that the program won't be stuck in an infinite loop
+		// if the "remove" string is part of the "replacement" string.
 		offset = p - m_s.c_str() + rep_len;
 		m_s = m_s.substr(0, p - m_s.c_str()) + replacement.value() +
 			string(p + rem_len);
