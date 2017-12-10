@@ -64,8 +64,42 @@ void UTF8string::replace(UTF8string remove, UTF8string replacement) {
 
 }
 
+// Lab 5
 ostream &operator<<(ostream &os,
 					const UTF8string &ustring) {
 	os << ustring.m_s;
 	return os;
+}
+
+UTF8string &operator+(UTF8string &ustring1, 
+						UTF8string &ustring2) {
+	UTF8string *sum = new UTF8string(ustring1.value() + ustring2.value());
+	return *sum;
+}
+
+void UTF8string::operator+=(const UTF8string &ustring) {
+	m_s += ustring.m_s;
+}
+
+UTF8string &operator*(UTF8string &ustring, int times) {
+	UTF8string *result = new UTF8string("");
+	int i;
+	for (i = 0; i < times; i++) {
+		*result += ustring;
+	}
+	return *result;
+}
+
+UTF8string &operator!(UTF8string &ustring) {
+
+	UTF8string *result = new UTF8string("");
+
+	unsigned char * s = (unsigned char *) ustring.m_s.c_str();
+	int length = 0;
+	while(*s) {
+		length = isutf8(s);
+		result->m_s.insert(0, (const char*) s, length);
+		_utf8_incr(s);
+	}
+	return *result;
 }

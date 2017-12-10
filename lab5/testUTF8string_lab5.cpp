@@ -4,10 +4,10 @@
 
 using namespace std;
 
-// static void func(UTF8string u) {
-//     // Function to make sure that nothing crashes
-//     cout << "Testing operator !: " << u << " -> " << !u << endl;
-// }
+static void func(UTF8string u) {
+    // Function to make sure that nothing crashes
+    cout << "Testing operator !: " << u << " -> " << !u << endl;
+}
 
 int main(int argc, char **argv) {
     // 
@@ -37,11 +37,11 @@ int main(int argc, char **argv) {
     cout << "test2 before replacement: " << test2 << endl;
     test2.replace("хорошо́", "просто");
     cout << "test2 after replacement: " << test2 << endl;
-    // cout << "test + test2: " << test + test2 << endl;
-    // cout << "Appending !!! to test" << endl;
-    // test += UTF8string("!!!");
-    // cout << "Result: " << test << endl;
-    // cout << "Testing operator *: " << test3 * 3 << "hurray" << endl;
-    // func(test4);
+    cout << "test + test2: " << test + test2 << endl;
+    cout << "Appending !!! to test" << endl;
+    test += UTF8string("!!!");
+    cout << "Result: " << test << endl;
+    cout << "Testing operator *: " << test3 * 3 << "hurray" << endl;
+    func(test4);
     return 0;
 }

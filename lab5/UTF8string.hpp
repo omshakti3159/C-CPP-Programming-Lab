@@ -4,8 +4,8 @@
 #include <iostream>
 #include <string>
 
-// THIS FILE DOESN'T NEED TO BE MODIFIED
-// YOU NEED TO WRITE UTF8string.cpp
+// Well, as instructed by the professor, this time
+// I can modify this file whatever I want hahahahaha
 
 class UTF8string {
       std::string  m_s;
@@ -30,9 +30,20 @@ class UTF8string {
       // No code required
       std::string  value() {return m_s;}; 
 
-// Lab 5
-friend std::ostream &operator<<(std::ostream &os,
-                              const UTF8string &ustring);
-};
+      // Lab 5
+      // Operator <<
+      friend std::ostream &operator<<(std::ostream &os,
+                                    const UTF8string &ustring);
+      // Operator +
+      friend UTF8string &operator+(UTF8string &ustring1, 
+                                    UTF8string &ustring2);
+      // Operator +=
+      void operator+=(const UTF8string &ustring);
+      // Operator *
+      friend UTF8string &operator*(UTF8string &ustring,
+                                    int times);
+      // Operator !
+      friend UTF8string &operator!(UTF8string &ustring);
+      };
 
 #endif
