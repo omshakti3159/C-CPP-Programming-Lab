@@ -42,6 +42,7 @@ int main(int argc, char **argv) {
     test += UTF8string("!!!");
     cout << "Result: " << test << endl;
     cout << "Testing operator *: " << test3 * 3 << "hurray" << endl;
+    cout << "Testing operator *: " << 3 * test3 << "hurray" << endl;
     func(test4);
     return 0;
 }

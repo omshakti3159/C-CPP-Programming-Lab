@@ -90,6 +90,10 @@ UTF8string &operator*(UTF8string &ustring, int times) {
 	return *result;
 }
 
+UTF8string &operator*(int times, UTF8string &ustring) {
+	return ustring * times;
+}
+
 UTF8string &operator!(UTF8string &ustring) {
 
 	UTF8string *result = new UTF8string("");

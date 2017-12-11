@@ -42,6 +42,8 @@ class UTF8string {
       // Operator *
       friend UTF8string &operator*(UTF8string &ustring,
                                     int times);
+      friend UTF8string &operator*(int times, 
+                                    UTF8string &ustring);
       // Operator !
       friend UTF8string &operator!(UTF8string &ustring);
       };
