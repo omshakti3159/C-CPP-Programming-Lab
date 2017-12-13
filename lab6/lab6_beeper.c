@@ -7,10 +7,12 @@
 #define SLEEP_TIME 5
 #define CHECK_TIME 0.5
 #define SIGCHLD_CODE 17
+#define SIGTRAP_CODE 5
+#define SIGKILL_CODE 9
 
-void sigchld_handler();
-char *fork_child();
+void fork_child();
 
+// Beeps
 void beep() {
 	int remains = 0;
 	time_t now;
@@ -20,7 +22,7 @@ void beep() {
 		if (remains == 0) {
 			now = time(NULL);
 			t = localtime(&now);
-			printf("Parent (%d) %02d:%02d:%02d beep!\n",
+			printf("------ Parent (%d) %02d:%02d:%02d beep!\n",
 				getpid(),
 				t->tm_hour,
 				t->tm_min,
@@ -32,13 +34,14 @@ void beep() {
 	}
 }
 
+// Watches the father every 0.5 sec
 void watch(pid_t ppid) {
 	int check_t = CHECK_TIME * 1e6;
 	while (1) {
 		usleep(check_t);
 		if(kill(ppid, 0)) {
-			printf("Parent is dead!\n");
-			printf("Child (%d) becomes Parent (%d) now.\n", 
+			printf("! Parent is dead!\n");
+			printf("! Child (%d) becomes Parent (%d) now.\n", 
 				getpid(), getpid());
 			fork_child();
 			return;
@@ -46,48 +49,51 @@ void watch(pid_t ppid) {
 	}
 }
 
-char *fork_child() {
+// Forks a child
+void fork_child() {
 
-	char *whoami = (char *) malloc(sizeof(char) * 50);
 	pid_t pid;
 	pid_t ppid;
 
 	ppid = getpid();
 
-	sprintf(whoami, "Parent (%d)", ppid);
-
 	if ((pid = fork()) == -1) {
-		perror("Unable to fork a child.\n");
+		perror("> Unable to fork a child.\n");
 		exit(1);
 	}
 	if (pid == 0) {
-		printf("%s fork successfully!\n", whoami);
-		sprintf(whoami, "Child (%d)", getpid());
-		printf("%s starts successfully!\n", whoami);
+		printf("> Parent (%d) fork successfully!\n", ppid);
+		printf("> Child (%d) starts successfully!\n", getpid());
 		watch(ppid);
 	}
 
-	return whoami;
 }
 
-// Handles the death of the child
+// Handles SIGCHLD signal
 void sigchld_handler() {
 
-	printf("The child is killed!\n");
-	printf("Trying to fork another child.\n");
+	printf("! Child is killed!\n");
+	printf("! Trying to fork another child.\n");
 
 	fork_child();
 }
 
+// Handles SIGTRAP signal
+void signtrap_handler() {
+	printf("!!! PROCESS (%d) EXIT.\n", getpid());
+	kill(0, SIGKILL_CODE);
+	exit(0);
+}
+
 int main() {
 
-	printf("Parent (%d) starts successfully!\n", getpid());
+	printf("> Parent (%d) starts successfully!\n", getpid());
 
 	(void)signal(SIGCHLD_CODE, sigchld_handler);
+	(void)signal(SIGTRAP_CODE, signtrap_handler);
 
-	char *whoami = fork_child();
+	fork_child();
 
-	sprintf(whoami, "Parent (%d)", getpid());
 	beep();
 	
 	
