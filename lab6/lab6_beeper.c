@@ -9,8 +9,9 @@
 #define SIGCHLD_CODE 17
 
 void sigchld_handler();
+char *fork_child();
 
-void beep(char *whoami) {
+void beep() {
 	int remains = 0;
 	time_t now;
 	struct tm *t;
@@ -19,8 +20,8 @@ void beep(char *whoami) {
 		if (remains == 0) {
 			now = time(NULL);
 			t = localtime(&now);
-			printf("%s %02d:%02d:%02d beep!\n",
-				whoami,
+			printf("Parent (%d) %02d:%02d:%02d beep!\n",
+				getpid(),
 				t->tm_hour,
 				t->tm_min,
 				t->tm_sec);
@@ -31,34 +32,29 @@ void beep(char *whoami) {
 	}
 }
 
-void watch(char *whoami, pid_t ppid) {
+void watch(pid_t ppid) {
 	int check_t = CHECK_TIME * 1e6;
 	while (1) {
 		usleep(check_t);
 		if(kill(ppid, 0)) {
 			printf("Parent is dead!\n");
-			printf("Child (%d) becomes Parent(%d) now.\n", getpid());
+			printf("Child (%d) becomes Parent (%d) now.\n", 
+				getpid(), getpid());
+			fork_child();
 			return;
 		}
 	}
 }
 
-void fork_child(char *whoami) {
-	
-}
+char *fork_child() {
 
-// Handles the death of the child
-void sigchld_handler() {
-
-	char whoami[50];
+	char *whoami = (char *) malloc(sizeof(char) * 50);
 	pid_t pid;
 	pid_t ppid;
 
 	ppid = getpid();
 
 	sprintf(whoami, "Parent (%d)", ppid);
-	printf("The child is killed!\n");
-	printf("Trying to fork another child.\n");
 
 	if ((pid = fork()) == -1) {
 		perror("Unable to fork a child.\n");
@@ -68,36 +64,31 @@ void sigchld_handler() {
 		printf("%s fork successfully!\n", whoami);
 		sprintf(whoami, "Child (%d)", getpid());
 		printf("%s starts successfully!\n", whoami);
-		watch(whoami, ppid);
+		watch(ppid);
 	}
+
+	return whoami;
+}
+
+// Handles the death of the child
+void sigchld_handler() {
+
+	printf("The child is killed!\n");
+	printf("Trying to fork another child.\n");
+
+	fork_child();
 }
 
 int main() {
-	
-	char whoami[50];
-	pid_t pid;
-	pid_t ppid;
 
-	ppid = getpid();
-
-	sprintf(whoami, "Parent (%d)", ppid);
-	printf("%s starts successfully!\n", whoami);
+	printf("Parent (%d) starts successfully!\n", getpid());
 
 	(void)signal(SIGCHLD_CODE, sigchld_handler);
 
-	if ((pid = fork()) == -1) {
-		perror("Unable to fork a child.\n");
-		exit(1);
-	}
-	if (pid == 0) {
-		printf("%s Fork successfully!\n", whoami);
-		sprintf(whoami, "Child (%d)", getpid());
-		printf("%s starts successfully!\n", whoami);
-		watch(whoami, ppid);
-	}
+	char *whoami = fork_child();
 
 	sprintf(whoami, "Parent (%d)", getpid());
-	beep(whoami);
+	beep();
 	
 	
 	return 0;
