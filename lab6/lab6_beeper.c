@@ -6,9 +6,6 @@
 
 #define SLEEP_TIME 5
 #define CHECK_TIME 0.5
-#define SIGCHLD_CODE 17
-#define SIGTRAP_CODE 5
-#define SIGKILL_CODE 9
 
 void fork_child();
 
@@ -81,7 +78,7 @@ void sigchld_handler() {
 // Handles SIGTRAP signal
 void signtrap_handler() {
 	printf("!!! PROCESS (%d) EXIT.\n", getpid());
-	kill(0, SIGKILL_CODE);
+	kill(0, SIGKILL);
 	exit(0);
 }
 
@@ -89,8 +86,8 @@ int main() {
 
 	printf("> Parent (%d) starts successfully!\n", getpid());
 
-	(void)signal(SIGCHLD_CODE, sigchld_handler);
-	(void)signal(SIGTRAP_CODE, signtrap_handler);
+	(void)signal(SIGCHLD, sigchld_handler);
+	(void)signal(SIGTRAP, signtrap_handler);
 
 	fork_child();
 
