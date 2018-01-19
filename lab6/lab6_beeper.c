@@ -3,11 +3,15 @@
 #include <unistd.h>
 #include <time.h>
 #include <signal.h>
+#include <sys/wait.h>
 
 #define SLEEP_TIME 5
 #define CHECK_TIME 0.5
 
 void fork_child();
+
+pid_t parent_pid;
+pid_t child_pid;
 
 // Beeps
 void beep() {
@@ -40,6 +44,9 @@ void watch(pid_t ppid) {
 			printf("! Parent is dead!\n");
 			printf("! Child (%d) becomes Parent (%d) now.\n", 
 				getpid(), getpid());
+
+			child_pid = parent_pid = getpid();
+
 			fork_child();
 			return;
 		}
@@ -61,13 +68,22 @@ void fork_child() {
 	if (pid == 0) {
 		printf("> Parent (%d) fork successfully!\n", ppid);
 		printf("> Child (%d) starts successfully!\n", getpid());
+
+		parent_pid = ppid;
+		child_pid = getpid();
+
 		watch(ppid);
+	}
+	else {
+		child_pid = pid;
 	}
 
 }
 
 // Handles SIGCHLD signal
-void sigchld_handler() {
+void sigchld_handler(int sig) {
+
+	wait(NULL);
 
 	printf("! Child is killed!\n");
 	printf("! Trying to fork another child.\n");
@@ -76,9 +92,17 @@ void sigchld_handler() {
 }
 
 // Handles SIGTRAP signal
-void signtrap_handler() {
+void signtrap_handler(int sig) {
 	printf("!!! PROCESS (%d) EXIT.\n", getpid());
-	kill(0, SIGKILL);
+	// kill(0, SIGKILL);
+
+	if (getpid() == parent_pid) {
+		// printf("child_pid = %d\n", child_pid);
+		kill(child_pid, SIGKILL);
+	} else {
+		kill(parent_pid, SIGKILL);
+	}
+
 	exit(0);
 }
 
@@ -88,6 +112,8 @@ int main() {
 
 	(void)signal(SIGCHLD, sigchld_handler);
 	(void)signal(SIGTRAP, signtrap_handler);
+
+	child_pid = parent_pid = getpid();
 
 	fork_child();
 
